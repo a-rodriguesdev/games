@@ -6,11 +6,11 @@ import java.time.LocalDate;
 @Entity
 @Table(name = "tbl_games")
 public class Game {
-@Id
-@GeneratedValue(
+    @Id
+    @GeneratedValue(
             strategy = GenerationType.SEQUENCE,
             generator = "TBL_GAMES_SEQ")
-@SequenceGenerator(
+    @SequenceGenerator(
             name = "TBL_GAMES_SEQ",
             sequenceName = "TBL_GAMES_SEQ",
             allocationSize = 1)

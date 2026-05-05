@@ -1,0 +1,5 @@
+# Copie este arquivo para database-local.properties na mesma pasta.
+# database-local.properties está no .gitignore e não será commitado.
+
+jakarta.persistence.jdbc.user=SEU_USUARIO
+jakarta.persistence.jdbc.password=SUA_SENHA
