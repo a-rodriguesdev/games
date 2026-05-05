@@ -15,7 +15,11 @@ public class Main {
 
          //pesquisar(em);
         //cadastrar(em);
-        listarTodosOsGames(em);
+        //listarTodosOsGames(em);
+        listarPorProdutora(em, "SNK");
+        //listarPorFinalizado(em, true);   // finalizados
+        //listarPorFinalizado(em, false);  // não finalizados
+        //listarPorFaixaDeLancamento(em, LocalDate.of(1980, 1, 1), LocalDate.of(1990, 12, 31));
 
     }
 
@@ -24,6 +28,30 @@ public class Main {
         List<Game> games = dao.listarTodosOsGames();
 
         for (Game game : games){
+            System.out.println(game);
+        }
+    }
+
+    public static void listarPorProdutora(EntityManager em, String produtora) {
+        GameDao dao = new GameDao(em);
+        List<Game> games = dao.listarPorProdutora(produtora);
+        for (Game game : games) {
+            System.out.println(game);
+        }
+    }
+
+    public static void listarPorFinalizado(EntityManager em, boolean finalizado) {
+        GameDao dao = new GameDao(em);
+        List<Game> games = dao.listarPorFinalizado(finalizado);
+        for (Game game : games) {
+            System.out.println(game);
+        }
+    }
+
+    public static void listarPorFaixaDeLancamento(EntityManager em, LocalDate inicio, LocalDate fim) {
+        GameDao dao = new GameDao(em);
+        List<Game> games = dao.listarPorFaixaDeLancamento(inicio, fim);
+        for (Game game : games) {
             System.out.println(game);
         }
     }
