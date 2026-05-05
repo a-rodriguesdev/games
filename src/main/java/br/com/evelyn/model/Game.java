@@ -1,6 +1,11 @@
 package br.com.evelyn.model;
 
-import jakarta.persistence.*;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.Table;
 import java.time.LocalDate;
 
 @Entity
@@ -15,7 +20,9 @@ public class Game {
     private LocalDate dataLancamento;
 
     private Double valor;
-    private String produtora;
+    @ManyToOne
+    @JoinColumn(name = "produtora_id")
+    private Produtora produtora;
     private Boolean finalizado;
 
     @ManyToOne
@@ -54,11 +61,11 @@ public class Game {
         this.valor = valor;
     }
 
-    public String getProdutora() {
+    public Produtora getProdutora() {
         return produtora;
     }
 
-    public void setProdutora(String produtora) {
+    public void setProdutora(Produtora produtora) {
         this.produtora = produtora;
     }
 
@@ -82,7 +89,7 @@ public class Game {
     public String toString() {
         return "ID:" + this.id + ""
                 + "\nTITULO: " + this.titulo + ""
-                + "\nPRODUTORA: " + this.produtora + ""
+                + "\nPRODUTORA: " + (this.produtora != null ? this.produtora.getNomeProdutora() : "N/A") + ""
                 + "\nCATEGORIA: " + this.categoria.getNomeCategoria() + ""
                 + "\nLANÇAMENTO: " + this.dataLancamento + ""
                 + "\nFINALIZADO: " + this.finalizado + ""

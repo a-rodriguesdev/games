@@ -43,9 +43,16 @@ public class GameDao {
     }
 
     public List<Game> listarPorProdutora(String produtora) {
-        String jpql = "SELECT g FROM Game g WHERE g.produtora = :produtora ORDER BY g.titulo ASC";
+        String jpql = "SELECT g FROM Game g WHERE UPPER(g.produtora.nomeProdutora) = UPPER(:produtora) ORDER BY g.titulo ASC";
         return em.createQuery(jpql, Game.class)
                 .setParameter("produtora", produtora)
+                .getResultList();
+    }
+
+    public List<Game> listarPorIdProdutora(Long idProdutora) {
+        String jpql = "SELECT g FROM Game g WHERE g.produtora.id = :idProdutora ORDER BY g.titulo ASC";
+        return em.createQuery(jpql, Game.class)
+                .setParameter("idProdutora", idProdutora)
                 .getResultList();
     }
 

@@ -4,9 +4,11 @@ import java.time.LocalDate;
 import java.util.List;
 import br.com.evelyn.games.dao.CategoriaDao;
 import br.com.evelyn.games.dao.GameDao;
+import br.com.evelyn.games.dao.ProdutoraDao;
 import br.com.evelyn.games.utils.Conexao;
 import br.com.evelyn.model.Categoria;
 import br.com.evelyn.model.Game;
+import br.com.evelyn.model.Produtora;
 import jakarta.persistence.EntityManager;
 
 public class Main {
@@ -16,9 +18,11 @@ public class Main {
          EntityManager em = Conexao.getEntityManager();
 
          //pesquisar(em);
-        //cadastrar(em);
+        cadastrar(em);
         //listarTodosOsGames(em);
-        listarCategoriaPorId(em);
+        //listarCategoriaPorId(em);
+        //listarProdutoras(em);
+        //listarGamesPorIdProdutora(em, 1L);
         //listarPorProdutora(em, "SNK");
         //listarPorFinalizado(em, true);   // finalizados
         //listarPorFinalizado(em, false);  // não finalizados
@@ -39,6 +43,23 @@ public class Main {
         List<Game> games = dao.listarTodosOsGames();
 
         for (Game game : games){
+            System.out.println(game);
+        }
+    }
+
+    public static void listarProdutoras(EntityManager em) {
+        ProdutoraDao dao = new ProdutoraDao(em);
+        List<Produtora> produtoras = dao.listarTodas();
+        for (Produtora produtora : produtoras) {
+            System.out.println(produtora);
+            System.out.println("------------------------");
+        }
+    }
+
+    public static void listarGamesPorIdProdutora(EntityManager em, Long idProdutora) {
+        GameDao dao = new GameDao(em);
+        List<Game> games = dao.listarPorIdProdutora(idProdutora);
+        for (Game game : games) {
             System.out.println(game);
         }
     }
@@ -88,16 +109,20 @@ public class Main {
         Categoria categoria = new Categoria();
         categoria.setId(2L);
 
-        //CategoriaDao categoriaDao = new CategoriaDao(em);
+        Produtora produtora = new Produtora();
+        produtora.setNomeProdutora("SEGA");
+        produtora.setCidadeSede("Toquio");
+
+        ProdutoraDao produtoraDao = new ProdutoraDao(em);
         em.getTransaction().begin();
-        //categoriaDao.salvar(categoria);
+        produtoraDao.salvar(produtora);
 
         Game game1 = new Game();
         game1.setTitulo("Street of Rage");
         game1.setCategoria(categoria);
         game1.setDataLancamento(LocalDate.of(1991, 7, 1));
         game1.setFinalizado(true);
-        game1.setProdutora("SEGA");
+        game1.setProdutora(produtora);
         game1.setValor(99.99);
 
         GameDao gameDao = new GameDao(em);
