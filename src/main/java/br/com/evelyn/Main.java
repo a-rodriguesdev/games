@@ -1,6 +1,7 @@
 package br.com.evelyn;
 
 import java.time.LocalDate;
+import java.util.List;
 import br.com.evelyn.games.dao.GameDao;
 import br.com.evelyn.games.utils.Conexao;
 import br.com.evelyn.model.Game;
@@ -12,8 +13,19 @@ public class Main {
 
          EntityManager em = Conexao.getEntityManager();
 
-         pesquisar(em);
+         //pesquisar(em);
+        //cadastrar(em);
+        listarTodosOsGames(em);
 
+    }
+
+    public static void listarTodosOsGames(EntityManager em){
+        GameDao dao = new GameDao(em);
+        List<Game> games = dao.listarTodosOsGames();
+
+        for (Game game : games){
+            System.out.println(game);
+        }
     }
 
     public static void pesquisar(EntityManager em) {
