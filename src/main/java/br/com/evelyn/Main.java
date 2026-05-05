@@ -23,7 +23,8 @@ public class Main {
             GameDao gameDao = new GameDao(em);
             em.getTransaction().begin();
             //gameDao.salvar(game1);
-            gameDao.atualizar(game1);
+            //gameDao.atualizar(game1);
+            gameDao.remover(game1);
             em.getTransaction().commit();
         } finally {
             Conexao.closeFactory();

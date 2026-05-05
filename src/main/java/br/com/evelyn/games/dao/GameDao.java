@@ -19,4 +19,9 @@ public class GameDao {
         em.merge(game);
     }
 
+    public void remover(Game game){
+        Game gameExcluir = em.find(Game.class, game.getId());
+        em.remove(gameExcluir);
+    }
+
 }
