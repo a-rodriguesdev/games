@@ -1,24 +1,26 @@
 package br.com.evelyn.model;
 
+import jakarta.persistence.*;
 import java.time.LocalDate;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
-
 
 @Entity
 @Table(name = "tbl_games")
 public class Game {
     @Id
     private Long id;
+
     private String titulo;
-    @Column(name = "dt_lancamento")
+
+    @Column(name = "data_lancamento")
     private LocalDate dataLancamento;
+
     private Double valor;
     private String produtora;
     private Boolean finalizado;
-    private String categoria;
+
+    @ManyToOne
+    @JoinColumn(name = "categoria_id")
+    private Categoria categoria;
 
     public Long getId() {
         return id;
@@ -68,11 +70,11 @@ public class Game {
         this.finalizado = finalizado;
     }
 
-    public String getCategoria() {
+    public Categoria getCategoria() {
         return categoria;
     }
 
-    public void setCategoria(String categoria) {
+    public void setCategoria(Categoria categoria) {
         this.categoria = categoria;
     }
 
@@ -81,7 +83,7 @@ public class Game {
         return "ID:" + this.id + ""
                 + "\nTITULO: " + this.titulo + ""
                 + "\nPRODUTORA: " + this.produtora + ""
-                + "\nCATEGORIA: " + this.categoria + ""
+                + "\nCATEGORIA: " + this.categoria.getNomeCategoria() + ""
                 + "\nLANÇAMENTO: " + this.dataLancamento + ""
                 + "\nFINALIZADO: " + this.finalizado + ""
                 + "\nVALOR: " + this.valor + "\n------------------------";

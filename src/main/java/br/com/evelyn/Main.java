@@ -2,8 +2,10 @@ package br.com.evelyn;
 
 import java.time.LocalDate;
 import java.util.List;
+import br.com.evelyn.games.dao.CategoriaDao;
 import br.com.evelyn.games.dao.GameDao;
 import br.com.evelyn.games.utils.Conexao;
+import br.com.evelyn.model.Categoria;
 import br.com.evelyn.model.Game;
 import jakarta.persistence.EntityManager;
 
@@ -16,11 +18,20 @@ public class Main {
          //pesquisar(em);
         //cadastrar(em);
         //listarTodosOsGames(em);
-        listarPorProdutora(em, "SNK");
+        listarCategoriaPorId(em);
+        //listarPorProdutora(em, "SNK");
         //listarPorFinalizado(em, true);   // finalizados
         //listarPorFinalizado(em, false);  // não finalizados
         //listarPorFaixaDeLancamento(em, LocalDate.of(1980, 1, 1), LocalDate.of(1990, 12, 31));
 
+    }
+
+    public static void listarCategoriaPorId(EntityManager em){
+        CategoriaDao categoriaDao = new CategoriaDao(em);
+        Categoria categoria = new Categoria();
+        categoria.setId(2L);
+        Categoria categoriaEncontrada = categoriaDao.buscarCategoriaPorId(categoria);
+        System.out.println(categoriaEncontrada.toString());
     }
 
     public static void listarTodosOsGames(EntityManager em){
@@ -74,16 +85,22 @@ public class Main {
     }
 
     public static void cadastrar(EntityManager em) {
+        Categoria categoria = new Categoria();
+        categoria.setId(2L);
+
+        //CategoriaDao categoriaDao = new CategoriaDao(em);
+        em.getTransaction().begin();
+        //categoriaDao.salvar(categoria);
+
         Game game1 = new Game();
-        game1.setTitulo("Ikari Warriors");
-        game1.setCategoria("Arcade");
-        game1.setDataLancamento(LocalDate.of(1986, 1, 1));
-        game1.setFinalizado(false);
-        game1.setProdutora("SNK");
-        game1.setValor(256.88);
+        game1.setTitulo("Street of Rage");
+        game1.setCategoria(categoria);
+        game1.setDataLancamento(LocalDate.of(1991, 7, 1));
+        game1.setFinalizado(true);
+        game1.setProdutora("SEGA");
+        game1.setValor(99.99);
 
         GameDao gameDao = new GameDao(em);
-        em.getTransaction().begin();
         gameDao.salvar(game1);
         em.getTransaction().commit();
         em.close();
