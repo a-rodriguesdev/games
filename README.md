@@ -1,6 +1,6 @@
 # Games
 
-Projeto Java de exemplo que persiste cadastros de jogos em **Oracle** usando **Jakarta Persistence (JPA)** e **Hibernate 6**. Inclui uma entidade `Game`, DAO simples e classe de conexão que monta o `EntityManagerFactory` de forma segura, **sem gravar usuário e senha no repositório**.
+Projeto Java de exemplo que persiste cadastros de jogos em **Oracle** usando **Jakarta Persistence (JPA)** e **Hibernate 6**. Inclui uma entidade `Game`, DAO simples e classe de conexão. Por padrão, usuário e senha vêm de `META-INF/persistence.xml` (adequado ao laboratório FIAP); você pode **sobrescrever** com variáveis de ambiente ou propriedades JVM para não versionar segredos em repositórios públicos.
 
 ## Requisitos
 
@@ -30,11 +30,15 @@ Para gerar o JAR:
 mvn package
 ```
 
-## Credenciais do banco (obrigatório)
+## Credenciais do banco
 
-Usuário e senha **não** ficam no `persistence.xml`. Informe-os por **uma** das opções abaixo (a primeira valor encontrado em cada campo é usada).
+Por padrão, **`jakarta.persistence.jdbc.user`** e **`jakarta.persistence.jdbc.password`** estão em `src/main/resources/META-INF/persistence.xml`, junto com a URL JDBC. Com isso o projeto **roda direto** na IDE ou com `mvn exec:java`, se o Oracle estiver acessível.
 
-### 1. Variáveis de ambiente (recomendado em CI e servidores)
+Se definir **ao mesmo tempo** `GAMES_DB_USER` e `GAMES_DB_PASSWORD` (ou `-Dgames.db.user` e `-Dgames.db.password`), esses valores **substituem** apenas usuário e senha do XML — útil em CI ou em forks públicos.
+
+**Atenção:** em repositório público, commitar senha no XML é arriscado; prefira sobrescrever por ambiente ou mantenha o XML apenas local.
+
+### Variáveis de ambiente (sobrescrita opcional)
 
 | Variável | Descrição |
 |----------|-----------|
@@ -44,40 +48,27 @@ Usuário e senha **não** ficam no `persistence.xml`. Informe-os por **uma** das
 **Windows (PowerShell):**
 
 ```powershell
-$env:GAMES_DB_USER = "seu_usuario"
-$env:GAMES_DB_PASSWORD = "sua_senha"
+$env:GAMES_DB_USER = "outro_usuario"
+$env:GAMES_DB_PASSWORD = "outra_senha"
 mvn exec:java
 ```
 
 **Linux / macOS:**
 
 ```bash
-export GAMES_DB_USER=seu_usuario
-export GAMES_DB_PASSWORD=sua_senha
+export GAMES_DB_USER=outro_usuario
+export GAMES_DB_PASSWORD=outra_senha
 mvn exec:java
 ```
 
-### 2. Propriedades da JVM
-
-Útil na configuração de execução da IDE:
+### Propriedades da JVM (sobrescrita opcional)
 
 ```text
--Dgames.db.user=seu_usuario
--Dgames.db.password=sua_senha
+-Dgames.db.user=outro_usuario
+-Dgames.db.password=outra_senha
 ```
 
-### 3. Arquivo local (desenvolvimento)
-
-1. Copie `src/main/resources/database-local.properties.example` para `src/main/resources/database-local.properties`.
-2. Preencha `jakarta.persistence.jdbc.user` e `jakarta.persistence.jdbc.password`.
-
-O arquivo `database-local.properties` está no `.gitignore` e **não deve ser commitado**.
-
-Se nenhuma opção fornecer usuário e senha, a aplicação falha na inicialização com uma mensagem explicando estas alternativas.
-
 ## Como executar
-
-Com credenciais já configuradas:
 
 ```bash
 mvn exec:java
@@ -85,7 +76,7 @@ mvn exec:java
 
 Classe principal: `br.com.evelyn.Main`.
 
-Na IDE, execute `Main` e defina variáveis de ambiente ou propriedades VM conforme acima.
+Na IDE, execute `Main` sem configuração extra se o `persistence.xml` já estiver correto para o seu usuário FIAP.
 
 ## Configuração da URL JDBC
 
@@ -104,12 +95,10 @@ src/main/java/br/com/evelyn/
     ├── dao/
     │   └── GameDao.java           # Persistência básica (salvar)
     └── utils/
-        └── Conexao.java           # EntityManagerFactory e resolução de credenciais
+        └── Conexao.java           # EntityManagerFactory (XML padrão; sobrescrita opcional por env/JVM)
 
 src/main/resources/
-├── META-INF/persistence.xml       # Unidade de persistência "games"
-├── database-local.properties.example
-└── database-local.properties      # (opcional, local, não versionado)
+└── META-INF/persistence.xml       # URL JDBC, usuário e senha; unidade "games"
 ```
 
 ## Licença

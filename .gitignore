@@ -36,6 +36,3 @@ build/
 
 ### Mac OS ###
 .DS_Store
-
-### Credenciais locais (copie database-local.properties.example) ###
-**/database-local.properties
